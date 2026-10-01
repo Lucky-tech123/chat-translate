@@ -2,7 +2,8 @@ name: Android APK
 
 on:
   push:
-    branches: ["**"]
+    branches:
+      - "**"
     paths:
       - "android/**"
       - ".github/workflows/android.yml"
@@ -22,16 +23,10 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Android SDK (no obsolete 'tools' package)
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          # Ensure API level matches android/app/build.gradle.kts (compileSdk = 34)
-          api-level: 34
-          # Explicit, valid sdkmanager packages only — do NOT include 'tools'
-          components: |
-            platform-tools
-            build-tools;34.0.0
-            platforms;android-34
+          packages: "platform-tools platforms;android-34 build-tools;34.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -42,7 +37,7 @@ jobs:
         working-directory: android
         run: gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Upload debug APK artifact
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: float-translate-debug-apk
