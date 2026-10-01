@@ -72,7 +72,7 @@ export class GatewayError extends Error {
 export async function translateText(apiKey: string, prompt: { instructions: string; input: string }, signal?: AbortSignal) {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
     method: "POST",
-    signal,
+    signal: signal ?? null,
     headers: {
       "Content-Type": "application/json",
       "Lovable-API-Key": apiKey,
